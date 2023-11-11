@@ -12,19 +12,12 @@ from sklearn.preprocessing import label_binarize
 def svm_train_test(train_data, train_labels, test_data, test_labels):
     # 将标签进行二进制编码
     test_labels_bin = label_binarize(test_labels, classes=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    svm_classifier = svm.SVC(C=100.0, kernel='rbf', gamma=0.03, verbose=True, probability=True,max_iter=10)
+    svm_classifier = svm.SVC(C=100.0, kernel='rbf', gamma=0.03, verbose=True, probability=True)
     print('模型信息')
     print(svm_classifier.get_params())
     t1 = time.time()
     # 训练
-    if os.path.exists('./model/svm.pkl'):
-        with open('./model/svm.pkl', 'rb') as f1:
-            svm_classifier = pickle.load(f1)
-
-    else:
-        svm_classifier.fit(train_data, train_labels)
-        with open('./model/svm.pkl', 'wb') as f2:
-            pickle.dump(svm_classifier, f2)
+    svm_classifier.fit(train_data, train_labels)
     t2 = time.time()
     SVMfit = float(t2 - t1)
     print("训练时间: {} seconds".format(SVMfit))
@@ -32,11 +25,10 @@ def svm_train_test(train_data, train_labels, test_data, test_labels):
     svm_predictions = svm_classifier.predict(test_data)
     print('模型测试')
 
-    predictions = [int(a) for a in svm_classifier.predict(test_data)]
     # 混淆矩阵
-    print(confusion_matrix(test_data, predictions))
+    print(confusion_matrix(test_labels, svm_predictions))
     # f1-score,precision,recall
-    print(classification_report(test_data, np.array(predictions)))
+    print(classification_report(test_labels, np.array(svm_predictions)))
     # 计算SVM模型的ROC曲线和AUC
     fpr_svm = dict()
     tpr_svm = dict()
