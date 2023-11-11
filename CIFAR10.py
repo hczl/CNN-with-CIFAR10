@@ -50,8 +50,6 @@ print(f"SVM Accuracy: {svm_accuracy}")
 
 # 测试CNN
 # 划分除验证集的部分
-train_dataset = CustomDataset(train_images, train_labels, transform=transforms.ToTensor())
-train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=64, shuffle=True)
 
-cnn_accuracy = cnn_train_test(train_loader, val_loader, test_loader, 10,0.005)
+cnn_accuracy = cnn_train_test(train_loader, val_loader, test_loader, 20,0.005)
 print(f"CNN Accuracy: {cnn_accuracy}")
